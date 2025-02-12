@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "252371777417",
+    "firebase_url": "https://cash-king-5a2e4-default-rtdb.firebaseio.com",
+    "project_id": "cash-king-5a2e4",
+    "storage_bucket": "cash-king-5a2e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252371777417:android:79f11b37e2fbb7186a1358",
+        "android_client_info": {
+          "package_name": "com.essloyaltyprogram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252371777417-mdlp02e1g9jpm24lgll4fjud5437b7an.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUt8EXASDyFroiqLQEFZecqiNdD3lCCp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252371777417-mdlp02e1g9jpm24lgll4fjud5437b7an.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "252371777417-vmp89cgahlfn8m0ldj0kjiejdgjb2mvb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.maantheme.cashRocket"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252371777417:android:9c078b9c5dab3bf56a1358",
+        "android_client_info": {
+          "package_name": "com.infotech.ess"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252371777417-mdlp02e1g9jpm24lgll4fjud5437b7an.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUt8EXASDyFroiqLQEFZecqiNdD3lCCp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252371777417-mdlp02e1g9jpm24lgll4fjud5437b7an.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "252371777417-vmp89cgahlfn8m0ldj0kjiejdgjb2mvb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.maantheme.cashRocket"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

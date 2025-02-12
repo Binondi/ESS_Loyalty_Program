@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/scan"
+        android:title="Quick Scan" />
+    <item
+        android:id="@+id/transactions"
+        android:icon="@drawable/ic_receipt"
+        android:title="@string/transactions" />
+</menu>

@@ -1,0 +1,168 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDEDED"
+    android:scrollbars="none"
+    android:id="@+id/scrollView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <!-- App Bar Placeholder -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/back"
+                android:layout_marginStart="9dp"
+                android:padding="8dp"
+                android:src="@drawable/back"/>
+        </LinearLayout>
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher_background"
+            android:scaleType="fitCenter"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <!-- OTP Image -->
+        <ImageView
+            android:id="@+id/loginImage"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:padding="60dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_otp_screen"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <!-- OTP Input Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EDEDED"
+            android:minHeight="230dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_otp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="30dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/an_otp_has_been_sent_to_your_mobile_no"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/resend"
+                        android:textSize="14sp"
+                        android:id="@+id/resend"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginEnd="20dp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="00:00"
+                    android:id="@+id/timer"
+                    android:visibility="gone"
+                    android:layout_marginEnd="20dp"/>
+            </LinearLayout>
+
+
+            <!-- OTP Input Fields -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="20dp"
+                android:weightSum="4">
+
+                <com.mukeshsolanki.OtpView
+                    android:id="@+id/otpView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:itemBackground="@drawable/bg_otp_item"
+                    android:textColor="@android:color/black"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:textSize="22sp"
+                    app:OtpHideLineWhenFilled="true"
+                    app:OtpItemCount="4"
+                    app:OtpItemSpacing="10dp"
+                    android:cursorVisible="false"
+                    app:OtpState_filled="true"
+                    app:OtpViewType="none"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/errorMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/please_enter_your_phone_number"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                android:visibility="gone"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/goToSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="@string/verify"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="10dp"
+                app:elevation="0dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
