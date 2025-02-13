@@ -1,6 +1,8 @@
 package com.essloyaltyprogram.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.essloyaltyprogram.R
 import com.essloyaltyprogram.adapter.HomeAdapter
-
 import com.essloyaltyprogram.adapter.SliderAdapter
 import com.essloyaltyprogram.dataClasses.BannerItem
 import com.essloyaltyprogram.dataClasses.HomeItems
@@ -20,10 +21,7 @@ import com.essloyaltyprogram.dataClasses.Users
 import com.essloyaltyprogram.databinding.FragmentHomeBinding
 import com.essloyaltyprogram.unit.SharedPref
 import com.essloyaltyprogram.unit.hideLoading
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 class HomeFragment : Fragment() {
 
@@ -35,27 +33,46 @@ class HomeFragment : Fragment() {
     private var userData = Users()
     private var bannerList = mutableListOf<BannerItem>()
     private lateinit var sliderAdapter: SliderAdapter
-
+    private val handler = Handler(Looper.getMainLooper())
+    private val autoScrollRunnable = object : Runnable {
+        override fun run() {
+            val nextItem = binding.viewPager.currentItem + 1
+            binding.viewPager.setCurrentItem(nextItem, true)
+            handler.postDelayed(this, 3000) // Slide every 3 seconds
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    private fun startAutoScroll() {
+        handler.postDelayed(autoScrollRunnable, 3000)
+    }
+
+    private fun stopAutoScroll() {
+        handler.removeCallbacks(autoScrollRunnable)
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        stopAutoScroll()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isAdded){
-            setSliderAdapter()
-            setListItems()
-            animateItems()
-            clickListeners()
-            userUid = SharedPref.getValue(requireContext(), "phone_no", "")
-            getUserDetails()
-            getSettingValues()
-        }
+
+        setListItems()
+        animateItems()
+        clickListeners()
+        userUid = SharedPref.getValue(requireContext(), "phone_no", "")
+        getUserDetails()
+        getSettingValues()
     }
 
     private fun getSettingValues() {
@@ -63,28 +80,22 @@ class HomeFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!isAdded) return
 
-                bannerList.clear() // Clear old data to prevent duplication
+                bannerList.clear()
                 val data = snapshot.getValue(Setting::class.java)
-                if (data != null) {
-                    if (data.banner.b1_status == "active"){
-                        val item = BannerItem(data.banner.b1_url,data.banner.b1,data.banner.b1_status)
-                        bannerList.add(item)
-                    }
-                    if (data.banner.b2_status == "active") {
-                        val item = BannerItem(data.banner.b2_url,data.banner.b2,data.banner.b2_status)
-                        bannerList.add(item)
-                    }
-                    if (data.banner.b3_status == "active") {
-                        val item = BannerItem(data.banner.b3_url,data.banner.b3,data.banner.b3_status)
-                        bannerList.add(item)
-                    }
-                    if (data.banner.b4_status == "active") {
-                        val item = BannerItem(data.banner.b4_url,data.banner.b4,data.banner.b4_status)
-                        bannerList.add(item)
-                    }
+                data?.banner?.let {
+                    if (it.b1_status == "active") bannerList.add(BannerItem(it.b1_url, it.b1, it.b1_status))
+                    if (it.b2_status == "active") bannerList.add(BannerItem(it.b2_url, it.b2, it.b2_status))
+                    if (it.b3_status == "active") bannerList.add(BannerItem(it.b3_url, it.b3, it.b3_status))
+                    if (it.b4_status == "active") bannerList.add(BannerItem(it.b4_url, it.b4, it.b4_status))
                 }
-                setSliderAdapter()
-                sliderAdapter.submitList(bannerList)
+
+
+
+                if (::sliderAdapter.isInitialized) {
+                    setSliderAdapter()
+                } else {
+                    setSliderAdapter()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -93,17 +104,26 @@ class HomeFragment : Fragment() {
         })
     }
 
-
     private fun setSliderAdapter() {
-        if (bannerList.isEmpty()) {
-            return 
-        }
+        if (bannerList.isEmpty()) return
 
-        sliderAdapter = SliderAdapter(requireContext())
-
+        sliderAdapter = SliderAdapter(bannerList)
         binding.viewPager.adapter = sliderAdapter
         binding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        binding.viewPager.offscreenPageLimit = 3
+
+        // Start at the middle position to create an illusion of infinite scrolling
+        val startPosition = Int.MAX_VALUE / 2
+        binding.viewPager.setCurrentItem(startPosition - (startPosition % bannerList.size), false)
+
+        startAutoScroll()
+
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                handler.removeCallbacks(autoScrollRunnable)
+                handler.postDelayed(autoScrollRunnable, 3000)
+            }
+        })
     }
 
 
@@ -122,24 +142,21 @@ class HomeFragment : Fragment() {
     private fun getUserDetails() {
         userRef.child(userUid).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                userData = snapshot.getValue(Users::class.java)!!
+                userData = snapshot.getValue(Users::class.java) ?: return
                 updateUI()
             }
 
-            override fun onCancelled(error: DatabaseError) {
-
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
     private fun updateUI() {
-
         val initials = getInitials(userData.name)
         binding.profileTxt.text = initials
         binding.userName.text = "Welcome, ${userData.name}"
         binding.coins.text = "₹${userData.money}"
-
     }
+
     private fun getInitials(name: String): String {
         return Regex("\\b\\w").findAll(name)
             .joinToString("") { it.value.uppercase() }
@@ -152,28 +169,29 @@ class HomeFragment : Fragment() {
             .translationX(0f)
             .setDuration(300)
             .start()
+
         binding.viewPager.translationX = -screenWidth.toFloat()
-        binding.profileBg.animate()
-            .translationY(0f)
+        binding.viewPager.animate()
+            .translationX(0f)
             .setDuration(300)
             .start()
     }
 
     private fun setListItems() {
-        itemsList.add(0, HomeItems(getString(R.string.promotional_offers),R.drawable.ic_percentage))
-        itemsList.add(1, HomeItems(getString(R.string.redeem),R.drawable.ic_redeem))
-        itemsList.add(2, HomeItems(getString(R.string.bank_fill),R.drawable.bank_fill))
-        itemsList.add(3, HomeItems(getString(R.string.catalog),R.drawable.ic_catalog))
-        itemsList.add(4, HomeItems(getString(R.string.transactions),R.drawable.ic_receipt))
-        itemsList.add(5, HomeItems(getString(R.string.refer),R.drawable.ic_refer))
-
+        itemsList.apply {
+            add(HomeItems(getString(R.string.promotional_offers), R.drawable.ic_percentage))
+            add(HomeItems(getString(R.string.redeem), R.drawable.ic_redeem))
+            add(HomeItems(getString(R.string.bank_fill), R.drawable.bank_fill))
+            add(HomeItems(getString(R.string.catalog), R.drawable.ic_catalog))
+            add(HomeItems(getString(R.string.transactions), R.drawable.ic_receipt))
+            add(HomeItems(getString(R.string.refer), R.drawable.ic_refer))
+        }
         setAdapter()
     }
+
     private fun setAdapter() {
         val adapter = HomeAdapter(requireContext(), itemsList)
-        val layoutManager = GridLayoutManager(requireContext(),3, GridLayoutManager.VERTICAL, false)
-        binding.optionsRecycleView.layoutManager = layoutManager
+        binding.optionsRecycleView.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.optionsRecycleView.adapter = adapter
-        adapter.notifyDataSetChanged()
     }
 }
