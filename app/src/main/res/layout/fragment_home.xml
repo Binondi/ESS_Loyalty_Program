@@ -205,6 +205,7 @@
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
+
                     android:layout_width="match_parent"
                     android:layout_height="180dp" />
 
@@ -218,43 +219,31 @@
                         android:layout_width="8dp"
                         android:layout_height="8dp"
                         android:layout_margin="1dp"
+                        android:id="@+id/dot1"
                         android:background="@drawable/circle_filled" />
 
                     <LinearLayout
                         android:layout_width="8dp"
                         android:layout_height="8dp"
                         android:layout_margin="1dp"
+                        android:id="@+id/dot2"
                         android:background="@drawable/circle_stroke" />
 
                     <LinearLayout
                         android:layout_width="8dp"
                         android:layout_height="8dp"
                         android:layout_margin="1dp"
+                        android:id="@+id/dot3"
                         android:background="@drawable/circle_stroke" />
 
                     <LinearLayout
                         android:layout_width="8dp"
                         android:layout_height="8dp"
                         android:layout_margin="1dp"
+                        android:id="@+id/dot4"
                         android:background="@drawable/circle_stroke" />
 
-                    <LinearLayout
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_margin="1dp"
-                        android:background="@drawable/circle_stroke" />
-
-                    <LinearLayout
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_margin="1dp"
-                        android:background="@drawable/circle_stroke" />
-
-                    <LinearLayout
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_margin="1dp"
-                        android:background="@drawable/circle_stroke" />
+                    
 
                 </LinearLayout>
 
