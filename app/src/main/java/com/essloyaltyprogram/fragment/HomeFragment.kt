@@ -1,18 +1,25 @@
 package com.essloyaltyprogram.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.essloyaltyprogram.R
 import com.essloyaltyprogram.adapter.HomeAdapter
+
+import com.essloyaltyprogram.adapter.SliderAdapter
+import com.essloyaltyprogram.dataClasses.BannerItem
 import com.essloyaltyprogram.dataClasses.HomeItems
+import com.essloyaltyprogram.dataClasses.Setting
 import com.essloyaltyprogram.dataClasses.Users
 import com.essloyaltyprogram.databinding.FragmentHomeBinding
 import com.essloyaltyprogram.unit.SharedPref
+import com.essloyaltyprogram.unit.hideLoading
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -23,8 +30,12 @@ class HomeFragment : Fragment() {
     private var itemsList = mutableListOf<HomeItems>()
     private lateinit var binding: FragmentHomeBinding
     private val userRef = FirebaseDatabase.getInstance().reference.child("users")
+    private val settingRef = FirebaseDatabase.getInstance().reference.child("setting")
     private var userUid = ""
     private var userData = Users()
+    private var bannerList = mutableListOf<BannerItem>()
+    private lateinit var sliderAdapter: SliderAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,13 +48,64 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (isAdded){
+            setSliderAdapter()
             setListItems()
             animateItems()
             clickListeners()
             userUid = SharedPref.getValue(requireContext(), "phone_no", "")
             getUserDetails()
+            getSettingValues()
         }
     }
+
+    private fun getSettingValues() {
+        settingRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (!isAdded) return
+
+                bannerList.clear() // Clear old data to prevent duplication
+                val data = snapshot.getValue(Setting::class.java)
+                if (data != null) {
+                    if (data.banner.b1_status == "active"){
+                        val item = BannerItem(data.banner.b1_url,data.banner.b1,data.banner.b1_status)
+                        bannerList.add(item)
+                    }
+                    if (data.banner.b2_status == "active") {
+                        val item = BannerItem(data.banner.b2_url,data.banner.b2,data.banner.b2_status)
+                        bannerList.add(item)
+                    }
+                    if (data.banner.b3_status == "active") {
+                        val item = BannerItem(data.banner.b3_url,data.banner.b3,data.banner.b3_status)
+                        bannerList.add(item)
+                    }
+                    if (data.banner.b4_status == "active") {
+                        val item = BannerItem(data.banner.b4_url,data.banner.b4,data.banner.b4_status)
+                        bannerList.add(item)
+                    }
+                }
+                setSliderAdapter()
+                sliderAdapter.submitList(bannerList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                hideLoading()
+            }
+        })
+    }
+
+
+    private fun setSliderAdapter() {
+        if (bannerList.isEmpty()) {
+            return 
+        }
+
+        sliderAdapter = SliderAdapter(requireContext())
+
+        binding.viewPager.adapter = sliderAdapter
+        binding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        binding.viewPager.offscreenPageLimit = 3
+    }
+
 
     private fun clickListeners() {
         binding.transactions.setOnClickListener {
