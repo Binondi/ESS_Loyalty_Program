@@ -41,6 +41,28 @@ class HomeFragment : Fragment() {
             handler.postDelayed(this, 3000) // Slide every 3 seconds
         }
     }
+    private lateinit var dots: List<View>
+
+    private fun setupDots() {
+        dots = listOf(
+            binding.dot1,
+            binding.dot2,
+            binding.dot3,
+            binding.dot4
+        )
+        updateDots(0) // Initialize first dot as active
+    }
+
+    private fun updateDots(position: Int) {
+        for (i in dots.indices) {
+            if (i == position % dots.size) {
+                dots[i].setBackgroundResource(R.drawable.circle_filled) // Active dot
+            } else {
+                dots[i].setBackgroundResource(R.drawable.circle_stroke) // Inactive dot
+            }
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +89,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupDots()
         setListItems()
         animateItems()
         clickListeners()
@@ -104,6 +127,8 @@ class HomeFragment : Fragment() {
         })
     }
 
+
+
     private fun setSliderAdapter() {
         if (bannerList.isEmpty()) return
 
@@ -120,6 +145,7 @@ class HomeFragment : Fragment() {
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                updateDots(position)
                 handler.removeCallbacks(autoScrollRunnable)
                 handler.postDelayed(autoScrollRunnable, 3000)
             }
@@ -149,6 +175,7 @@ class HomeFragment : Fragment() {
             override fun onCancelled(error: DatabaseError) {}
         })
     }
+
 
     private fun updateUI() {
         val initials = getInitials(userData.name)

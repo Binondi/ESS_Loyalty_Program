@@ -170,6 +170,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun getSettingValues() {
+        if (!isAdded) return
         settingRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!isAdded) return

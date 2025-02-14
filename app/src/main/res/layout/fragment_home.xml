@@ -243,7 +243,7 @@
                         android:id="@+id/dot4"
                         android:background="@drawable/circle_stroke" />
 
-                    
+
 
                 </LinearLayout>
 

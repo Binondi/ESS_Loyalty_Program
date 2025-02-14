@@ -72,6 +72,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun getSettingValues() {
+        if (!isAdded) return
         settingRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val data = snapshot.getValue(Setting::class.java)

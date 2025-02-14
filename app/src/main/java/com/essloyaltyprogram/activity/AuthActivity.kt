@@ -34,9 +34,8 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        switchToLogin()
         requestNotificationPermission()
-
+        switchToLogin()
     }
 
     fun switchToSignup() {
