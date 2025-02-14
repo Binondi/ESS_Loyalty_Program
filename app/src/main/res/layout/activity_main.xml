@@ -30,7 +30,6 @@
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/toolbarColor"
                     android:elevation="7dp"
-
                     app:navigationIconTint="@color/colorPrimary"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     app:title="@string/app_name"
@@ -76,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
+            android:background="@color/colorPrimary"
             android:src="@drawable/ic_qr"
             app:elevation="4dp"
             app:layout_anchor="@id/bottomAppBar" />

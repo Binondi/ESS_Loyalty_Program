@@ -266,7 +266,6 @@ class SignupFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val postalResponses = response.body()
                     if (!postalResponses.isNullOrEmpty() && postalResponses[0].Status == "Success") {
-                        val message = postalResponses[0].Message
 
                         postalResponses[0].PostOffice.forEach { postOffice ->
                             hideLoading()
@@ -274,12 +273,31 @@ class SignupFragment : Fragment() {
                             binding.edtCity.setText(postOffice.Block)
                             binding.edtState.setText(postOffice.State)
                         }
+                    }else {
+                        hideLoading()
+                        Toast.makeText(
+                            requireContext(),
+                            "Something went wrong, please try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+                }else {
+                    hideLoading()
+                    Toast.makeText(
+                        requireContext(),
+                        "Something went wrong, please try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<List<PinCodeItem>>, t: Throwable) {
-
+                hideLoading()
+                Toast.makeText(
+                    requireContext(),
+                    "Something went wrong, please check your internet and try again",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }

@@ -31,4 +31,8 @@
     <string name="verify">Verify</string>
     <string name="an_otp_has_been_sent_to_your_mobile_no">An OTP has been sent to your mobile no</string>
     <string name="resend">Resend</string>
+    <string name="notifications">Notifications</string>
+    <string name="no_data">No Data</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="plumber_group">PLUMBER GROUP</string>
 </resources>
