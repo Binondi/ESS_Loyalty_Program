@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="110dp"
-    android:layout_height="110dp"
+    android:layout_width="@dimen/_110sdp"
+    android:layout_height="@dimen/_110sdp"
     app:cardBackgroundColor="#F3111324"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="@dimen/_12sdp"
     app:cardElevation="0dp">
 
     <LinearLayout
@@ -12,11 +12,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/_16sdp">
 
         <ProgressBar
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
             android:indeterminateTint="#FFFFFF" />
 
         <TextView

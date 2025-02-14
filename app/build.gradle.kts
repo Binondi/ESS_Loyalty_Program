@@ -57,4 +57,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.otpview)
+    implementation(libs.sdp.android)
 }

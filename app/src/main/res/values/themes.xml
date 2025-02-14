@@ -8,6 +8,13 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
+    <style name="Home.ESSLoyaltyProgram" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/toolbarColor</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
 
     <style name="Theme.ESSLoyaltyProgram" parent="ESSLoyaltyProgram" />
     <style name="ToolBarTheme" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>

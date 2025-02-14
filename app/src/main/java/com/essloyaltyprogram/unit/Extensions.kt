@@ -39,3 +39,8 @@ fun generateUniqueString(existingStrings: List<String>): String {
 
     return newString
 }
+
+fun getInitials(name: String): String {
+    return Regex("\\b\\w").findAll(name)
+        .joinToString("") { it.value.uppercase() }
+}

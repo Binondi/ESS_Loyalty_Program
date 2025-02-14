@@ -30,11 +30,16 @@
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/toolbarColor"
                     android:elevation="7dp"
+                    style="@style/Widget.MaterialComponents.Toolbar"
                     app:navigationIconTint="@color/colorPrimary"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     app:title="@string/app_name"
                     app:titleTextColor="@color/colorPrimary" />
             </com.google.android.material.appbar.AppBarLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:background="@color/gray"/>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -52,19 +57,21 @@
             android:background="@color/white"
             app:fabAlignmentMode="center"
             app:elevation="4dp"
-            app:fabCradleVerticalOffset="4dp"
+            style="@style/Widget.MaterialComponents.BottomAppBar"
+            app:backgroundTint="@color/white"
+            app:fabCradleVerticalOffset="@dimen/_4sdp"
             app:fabCradleRoundedCornerRadius="24dp"
-            app:fabCradleMargin="4dp"
-
+            app:fabCradleMargin="@dimen/_4sdp"
             app:fabAnchorMode="cradle">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:background="@color/white"
+                android:layout_marginEnd="@dimen/_12sdp"
                 app:elevation="0dp"
+                style="@style/Widget.MaterialComponents.BottomNavigationView"
+                android:background="@color/white"
                 app:itemRippleColor="@android:color/transparent"
                 app:labelVisibilityMode="labeled"
                 app:menu="@menu/bottom_nav_menu" />
@@ -77,17 +84,22 @@
             android:backgroundTint="@color/colorPrimary"
             android:background="@color/colorPrimary"
             android:src="@drawable/ic_qr"
+            app:backgroundTint="@color/colorPrimary"
+            android:tint="@color/white"
             app:elevation="4dp"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
             app:layout_anchor="@id/bottomAppBar" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        style="@style/ThemeOverlay.Material3.NavigationView"
         android:id="@+id/navigationView">
-        <include layout="@layout/drawer_main" android:id="@+id/drawer"/>
+        <include layout="@layout/drawer_main"
+            android:id="@+id/drawer"/>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

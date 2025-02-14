@@ -35,4 +35,15 @@
     <string name="no_data">No Data</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="plumber_group">PLUMBER GROUP</string>
+    <string name="notification">Notification</string>
+    <string name="announcements">Announcements</string>
+    <string name="catalogue">Catalogue</string>
+    <string name="help_support"><![CDATA[Help & Support]]></string>
+    <string name="about_us">About Us</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="version_1_0">VERSION 1.0</string>
+    <string name="logout">Logout</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="kyc_pending">KYC Pending</string>
 </resources>

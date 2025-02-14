@@ -1,5 +1,6 @@
 package com.essloyaltyprogram.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.essloyaltyprogram.R
+import com.essloyaltyprogram.activity.KycActivity
 import com.essloyaltyprogram.adapter.HomeAdapter
 import com.essloyaltyprogram.adapter.SliderAdapter
 import com.essloyaltyprogram.dataClasses.BannerItem
@@ -20,6 +22,7 @@ import com.essloyaltyprogram.dataClasses.Setting
 import com.essloyaltyprogram.dataClasses.Users
 import com.essloyaltyprogram.databinding.FragmentHomeBinding
 import com.essloyaltyprogram.unit.SharedPref
+import com.essloyaltyprogram.unit.getInitials
 import com.essloyaltyprogram.unit.hideLoading
 import com.google.firebase.database.*
 
@@ -38,7 +41,7 @@ class HomeFragment : Fragment() {
         override fun run() {
             val nextItem = binding.viewPager.currentItem + 1
             binding.viewPager.setCurrentItem(nextItem, true)
-            handler.postDelayed(this, 3000) // Slide every 3 seconds
+            handler.postDelayed(this, 3000)
         }
     }
     private lateinit var dots: List<View>
@@ -50,15 +53,15 @@ class HomeFragment : Fragment() {
             binding.dot3,
             binding.dot4
         )
-        updateDots(0) // Initialize first dot as active
+        updateDots(0)
     }
 
     private fun updateDots(position: Int) {
         for (i in dots.indices) {
             if (i == position % dots.size) {
-                dots[i].setBackgroundResource(R.drawable.circle_filled) // Active dot
+                dots[i].setBackgroundResource(R.drawable.circle_filled)
             } else {
-                dots[i].setBackgroundResource(R.drawable.circle_stroke) // Inactive dot
+                dots[i].setBackgroundResource(R.drawable.circle_stroke)
             }
         }
     }
@@ -136,7 +139,6 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter = sliderAdapter
         binding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
-        // Start at the middle position to create an illusion of infinite scrolling
         val startPosition = Int.MAX_VALUE / 2
         binding.viewPager.setCurrentItem(startPosition - (startPosition % bannerList.size), false)
 
@@ -163,6 +165,9 @@ class HomeFragment : Fragment() {
         binding.redeem.setOnClickListener {
             Toast.makeText(requireContext(), "Redeem", Toast.LENGTH_SHORT).show()
         }
+        binding.profileBgFrame.setOnClickListener {
+            startActivity(Intent(requireContext(), KycActivity::class.java))
+        }
     }
 
     private fun getUserDetails() {
@@ -180,13 +185,16 @@ class HomeFragment : Fragment() {
     private fun updateUI() {
         val initials = getInitials(userData.name)
         binding.profileTxt.text = initials
+        SharedPref.apply {
+            setValue(requireContext(),"name",userData.name)
+            setValue(requireContext(),"pinCode",userData.pinCode)
+            setValue(requireContext(),"district",userData.district)
+            setValue(requireContext(),"state",userData.state)
+            setValue(requireContext(),"city",userData.city)
+            setValue(requireContext(),"money",userData.money)
+        }
         binding.userName.text = "Welcome, ${userData.name}"
         binding.coins.text = "₹${userData.money}"
-    }
-
-    private fun getInitials(name: String): String {
-        return Regex("\\b\\w").findAll(name)
-            .joinToString("") { it.value.uppercase() }
     }
 
     private fun animateItems() {

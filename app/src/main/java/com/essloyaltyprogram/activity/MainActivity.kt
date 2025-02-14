@@ -20,6 +20,8 @@ import com.essloyaltyprogram.dataClasses.HomeItems
 import com.essloyaltyprogram.databinding.ActivityMainBinding
 import com.essloyaltyprogram.fragment.HomeFragment
 import com.essloyaltyprogram.fragment.TransactionFragment
+import com.essloyaltyprogram.unit.SharedPref
+import com.essloyaltyprogram.unit.showLoading
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+        setUpDrawarLayouts()
         // Handle Navigation Item Clicks
         loadFragment(HomeFragment())
 
@@ -65,6 +68,14 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun setUpDrawarLayouts() {
+        binding.drawer.logout.setOnClickListener {
+
+        }
+        binding.drawer.userName.text = SharedPref.getValue(this,"name","Hello Dear")
+    }
+
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)

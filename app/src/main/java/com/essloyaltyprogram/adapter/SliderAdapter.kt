@@ -1,8 +1,11 @@
 package com.essloyaltyprogram.adapter
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.essloyaltyprogram.dataClasses.BannerItem
@@ -29,10 +32,20 @@ class SliderAdapter(private val bannerList: List<BannerItem>) :
             .load(item.image)
             .into(holder.binding.banner)
         holder.binding.progressBar.visibility = View.GONE
+        holder.binding.root.setOnClickListener {
+            if (item.url != null && item.url.contains("http")) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setData(Uri.parse(item.url))
+                holder.itemView.context.startActivity(intent)
+            }else {
+                Toast.makeText(holder.itemView.context, "Invalid Url", Toast.LENGTH_SHORT).show()
+            }
+
+        }
     }
 
     override fun getItemCount(): Int {
-        return if (bannerList.isNotEmpty()) Int.MAX_VALUE else 0 // Fake infinite list
+        return if (bannerList.isNotEmpty()) Int.MAX_VALUE else 0
     }
 }
 
