@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.essloyaltyprogram.R
 import com.essloyaltyprogram.activity.AuthActivity
 import com.essloyaltyprogram.api.Fast2SMSApi
 import com.essloyaltyprogram.api.PinCodeService
@@ -25,6 +26,8 @@ import com.essloyaltyprogram.models.SharedViewModel
 import com.essloyaltyprogram.unit.SharedPref
 import com.essloyaltyprogram.unit.generateOtp
 import com.essloyaltyprogram.unit.hideLoading
+import com.essloyaltyprogram.unit.showErrorToast
+import com.essloyaltyprogram.unit.showInfoToast
 import com.essloyaltyprogram.unit.showLoading
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -97,35 +100,35 @@ class SignupFragment : Fragment() {
             state = binding.edtState.text.toString()
             city = binding.edtCity.text.toString()
             if (mobileNo.isEmpty()){
-                Toast.makeText(requireContext(), "Enter Mobile No", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_your_mobile_no))
                 return@setOnClickListener
             }
             if (firstName.isEmpty()){
-                Toast.makeText(requireContext(), "Enter First Name", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_first_name))
                 return@setOnClickListener
             }
             if (lastName.isEmpty()){
-                Toast.makeText(requireContext(), "Enter Last Name", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_last_name))
                 return@setOnClickListener
             }
             if (pinCode.isEmpty()){
-                Toast.makeText(requireContext(), "Enter Pincode", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_pincode))
                 return@setOnClickListener
             }
             if (pinCode.length != 6){
-                Toast.makeText(requireContext(), "Invalid Pincode", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.invalid_pincode))
                 return@setOnClickListener
             }
             if (district.isEmpty()){
-                Toast.makeText(requireContext(), "Enter District", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_disrict))
                 return@setOnClickListener
             }
             if (state.isEmpty()){
-                Toast.makeText(requireContext(), "Enter State", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_state))
                 return@setOnClickListener
             }
             if (city.isEmpty()){
-                Toast.makeText(requireContext(), "Enter City", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.enter_city))
                 return@setOnClickListener
             }
 
@@ -205,11 +208,7 @@ class SignupFragment : Fragment() {
                     }
                 }
                 if (isUserExists){
-                    Toast.makeText(
-                        requireContext(),
-                        "You already have an account please login",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showInfoToast(requireContext(), getString(R.string.you_already_have_an_account_please_login))
                     viewModel.setData(phone)
                     (activity as? AuthActivity)?.switchToLogin()
                     hideLoading()
@@ -242,18 +241,18 @@ class SignupFragment : Fragment() {
                         signUpUser()
                     }else {
                         hideLoading()
-                        Toast.makeText(requireContext(), "Failed to send OTP, please try again", Toast.LENGTH_SHORT).show()
+                        showErrorToast(requireContext(),getString(R.string.failed_to_send_otp))
                     }
 
                 } else {
                     hideLoading()
-                    Toast.makeText(requireContext(), "Failed to send OTP, please try again", Toast.LENGTH_SHORT).show()
+                    showErrorToast(requireContext(),getString(R.string.failed_to_send_otp))
                 }
             }
 
             override fun onFailure(p0: Call<OtpResponse?>, p1: Throwable) {
                 hideLoading()
-                Toast.makeText(requireContext(), "Failed to send OTP ${p1.message}", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.failed_to_send_otp_and_message) + p1.message)
             }
         })
     }
@@ -275,29 +274,17 @@ class SignupFragment : Fragment() {
                         }
                     }else {
                         hideLoading()
-                        Toast.makeText(
-                            requireContext(),
-                            "Something went wrong, please try again",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showErrorToast(requireContext(),getString(R.string.invalid_pincode))
                     }
                 }else {
                     hideLoading()
-                    Toast.makeText(
-                        requireContext(),
-                        "Something went wrong, please try again",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showErrorToast(requireContext(),getString(R.string.invalid_pincode))
                 }
             }
 
             override fun onFailure(call: Call<List<PinCodeItem>>, t: Throwable) {
                 hideLoading()
-                Toast.makeText(
-                    requireContext(),
-                    "Something went wrong, please check your internet and try again",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showErrorToast(requireContext(),getString(R.string.please_check_your_internet_connection))
             }
         })
     }

@@ -52,10 +52,12 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //custom libraries
     implementation(libs.circleimageview)
     implementation(libs.glide)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.otpview)
     implementation(libs.sdp.android)
+    implementation(libs.toasty)
 }

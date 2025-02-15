@@ -1,5 +1,6 @@
 package com.essloyaltyprogram.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,7 @@ import com.essloyaltyprogram.fragment.HomeFragment
 import com.essloyaltyprogram.fragment.TransactionFragment
 import com.essloyaltyprogram.unit.SharedPref
 import com.essloyaltyprogram.unit.showLoading
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,9 +73,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpDrawarLayouts() {
         binding.drawer.logout.setOnClickListener {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Logout !")
+                .setMessage("Are you sure you want to logout this account ?")
+                .setPositiveButton("Logout") { _, _ ->
+                    SharedPref.removeValue(this,"phone_no")
+                    startActivity(Intent(this, AuthActivity::class.java))
+                    finish()
+                }
+                .setNegativeButton("Cancel"){_,_->
 
+                }
+                .create().show()
         }
         binding.drawer.userName.text = SharedPref.getValue(this,"name","Hello Dear")
+        binding.drawer.phoneNo.text = SharedPref.getValue(this,"phone_no","")
     }
 
     private fun loadFragment(fragment: Fragment) {

@@ -7,9 +7,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.essloyaltyprogram.R
 import com.essloyaltyprogram.activity.AuthActivity
 import com.essloyaltyprogram.api.Fast2SMSApi
 import com.essloyaltyprogram.api.RetrofitHelper
@@ -22,6 +22,8 @@ import com.essloyaltyprogram.models.SharedViewModel
 import com.essloyaltyprogram.unit.SharedPref
 import com.essloyaltyprogram.unit.generateOtp
 import com.essloyaltyprogram.unit.hideLoading
+import com.essloyaltyprogram.unit.showErrorToast
+import com.essloyaltyprogram.unit.showInfoToast
 import com.essloyaltyprogram.unit.showLoading
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -119,8 +121,7 @@ class LoginFragment : Fragment() {
             }
 
             if (phoneNo.length != 10) {
-                Toast.makeText(requireContext(), "Please enter a valid no", Toast.LENGTH_SHORT)
-                    .show()
+                showErrorToast(requireContext(),getString(R.string.please_enter_a_valid_no))
                 return@setOnClickListener
             }
 
@@ -159,18 +160,18 @@ class LoginFragment : Fragment() {
                         loginUser(phone,otp)
                     }else {
                         hideLoading()
-                        Toast.makeText(requireContext(), "Failed to send OTP, please try again", Toast.LENGTH_SHORT).show()
+                        showErrorToast(requireContext(),getString(R.string.failed_to_send_otp))
                     }
 
                 } else {
                     hideLoading()
-                    Toast.makeText(requireContext(), "Failed to send OTP, please try again", Toast.LENGTH_SHORT).show()
+                    showErrorToast(requireContext(),getString(R.string.failed_to_send_otp))
                 }
             }
 
             override fun onFailure(p0: retrofit2.Call<OtpResponse?>, p1: Throwable) {
                 hideLoading()
-                Toast.makeText(requireContext(), "Failed to send OTP ${p1.message}", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.failed_to_send_otp_and_message)+ p1.message)
             }
         })
     }
@@ -195,11 +196,7 @@ class LoginFragment : Fragment() {
                     sendOtp(phone, otp.toString())
                 }else {
                     viewModel.setData(phone)
-                    Toast.makeText(
-                        requireContext(),
-                        "You don't have any account please create one.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showInfoToast(requireContext(),getString(R.string.you_donot_have_account_create_one))
                     (activity as? AuthActivity)?.switchToSignup()
                     hideLoading()
                 }

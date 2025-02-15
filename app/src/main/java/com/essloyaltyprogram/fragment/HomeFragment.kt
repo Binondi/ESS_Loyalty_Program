@@ -34,6 +34,8 @@ class HomeFragment : Fragment() {
     private val settingRef = FirebaseDatabase.getInstance().reference.child("setting")
     private var userUid = ""
     private var userData = Users()
+    private var userName = ""
+    private var money = ""
     private var bannerList = mutableListOf<BannerItem>()
     private lateinit var sliderAdapter: SliderAdapter
     private val handler = Handler(Looper.getMainLooper())
@@ -92,13 +94,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupDots()
-        setListItems()
-        animateItems()
-        clickListeners()
-        userUid = SharedPref.getValue(requireContext(), "phone_no", "")
-        getUserDetails()
-        getSettingValues()
+        if (isAdded) {
+            setSliderAdapter()
+            setupDots()
+            setListItems()
+            animateItems()
+            clickListeners()
+            userUid = SharedPref.getValue(requireContext(), "phone_no", "")
+            getUserDetails()
+            getSettingValues()
+            userName = SharedPref.getValue(requireContext(), "name", "Dear")
+            money = SharedPref.getValue(requireContext(), "money", "0")
+            binding.userName.text = "Welcome, $userName"
+            binding.coins.text = "₹$money"
+        }
     }
 
     private fun getSettingValues() {
@@ -109,14 +118,37 @@ class HomeFragment : Fragment() {
                 bannerList.clear()
                 val data = snapshot.getValue(Setting::class.java)
                 data?.banner?.let {
-                    if (it.b1_status == "active") bannerList.add(BannerItem(it.b1_url, it.b1, it.b1_status))
-                    if (it.b2_status == "active") bannerList.add(BannerItem(it.b2_url, it.b2, it.b2_status))
-                    if (it.b3_status == "active") bannerList.add(BannerItem(it.b3_url, it.b3, it.b3_status))
-                    if (it.b4_status == "active") bannerList.add(BannerItem(it.b4_url, it.b4, it.b4_status))
+                    if (data.banner.status != "Off") {
+                        if (it.b1_status == "active") bannerList.add(
+                            BannerItem(
+                                it.b1_url,
+                                it.b1,
+                                it.b1_status
+                            )
+                        )
+                        if (it.b2_status == "active") bannerList.add(
+                            BannerItem(
+                                it.b2_url,
+                                it.b2,
+                                it.b2_status
+                            )
+                        )
+                        if (it.b3_status == "active") bannerList.add(
+                            BannerItem(
+                                it.b3_url,
+                                it.b3,
+                                it.b3_status
+                            )
+                        )
+                        if (it.b4_status == "active") bannerList.add(
+                            BannerItem(
+                                it.b4_url,
+                                it.b4,
+                                it.b4_status
+                            )
+                        )
+                    }
                 }
-
-
-
                 if (::sliderAdapter.isInitialized) {
                     setSliderAdapter()
                 } else {
@@ -133,14 +165,19 @@ class HomeFragment : Fragment() {
 
 
     private fun setSliderAdapter() {
-        if (bannerList.isEmpty()) return
-
+        if (bannerList.isEmpty()) {
+            binding.viewPager.visibility = View.GONE
+            binding.dotsBg.visibility = View.GONE
+            return
+        }
+        binding.viewPager.visibility = View.VISIBLE
+        binding.dotsBg.visibility = View.VISIBLE
         sliderAdapter = SliderAdapter(bannerList)
         binding.viewPager.adapter = sliderAdapter
         binding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
 
         val startPosition = Int.MAX_VALUE / 2
-        binding.viewPager.setCurrentItem(startPosition - (startPosition % bannerList.size), false)
+        binding.viewPager.setCurrentItem(startPosition - (startPosition % bannerList.size), true)
 
         startAutoScroll()
 
@@ -193,8 +230,10 @@ class HomeFragment : Fragment() {
             setValue(requireContext(),"city",userData.city)
             setValue(requireContext(),"money",userData.money)
         }
-        binding.userName.text = "Welcome, ${userData.name}"
-        binding.coins.text = "₹${userData.money}"
+        userName = userData.name
+        money = userData.money
+        binding.userName.text = "Welcome, $userName"
+        binding.coins.text = "₹$money"
     }
 
     private fun animateItems() {
@@ -205,9 +244,9 @@ class HomeFragment : Fragment() {
             .setDuration(300)
             .start()
 
-        binding.viewPager.translationX = -screenWidth.toFloat()
+        binding.viewPager.translationY = -screenWidth.toFloat()
         binding.viewPager.animate()
-            .translationX(0f)
+            .translationY(0f)
             .setDuration(300)
             .start()
     }

@@ -1,7 +1,9 @@
 package com.essloyaltyprogram.unit
 
 import android.content.Context
+import android.widget.Toast
 import com.essloyaltyprogram.R
+import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,4 +45,16 @@ fun generateUniqueString(existingStrings: List<String>): String {
 fun getInitials(name: String): String {
     return Regex("\\b\\w").findAll(name)
         .joinToString("") { it.value.uppercase() }
+}
+fun showErrorToast(context: Context,message: String){
+    Toasty.error(context, message, Toast.LENGTH_SHORT, true).show()
+}
+fun showSuccessToast(context: Context,message: String){
+    Toasty.success(context, message, Toast.LENGTH_SHORT, true).show()
+}
+fun showInfoToast(context: Context, message: String){
+    Toasty.info(context, message, Toast.LENGTH_SHORT, true).show()
+}
+fun showWarningToast(context: Context, message: String){
+    Toasty.warning(context, message, Toast.LENGTH_SHORT, true).show()
 }

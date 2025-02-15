@@ -46,4 +46,21 @@
     <string name="terms_of_use">Terms of Use</string>
     <string name="contact_us">Contact Us</string>
     <string name="kyc_pending">KYC Pending</string>
+    <string name="please_enter_a_valid_no">Please enter a valid no</string>
+    <string name="failed_to_send_otp">Failed to send OTP, please try again</string>
+    <string name="failed_to_send_otp_and_message">"Failed to send OTP "</string>
+    <string name="you_donot_have_account_create_one">You don\'t have any account please create one.</string>
+    <string name="failed_to_send_otp_please_try_again">Failed to send OTP, please try again</string>
+    <string name="something_went_wrong_please_try_again_later">Something went wrong, please try again later</string>
+    <string name="please_enter_your_otp">Please Enter Your OTP</string>
+    <string name="invalid_otp">Invalid OTP</string>
+    <string name="enter_first_name">Enter First Name</string>
+    <string name="enter_last_name">Enter Last Name</string>
+    <string name="enter_pincode">Enter Pincode</string>
+    <string name="invalid_pincode">Invalid Pincode</string>
+    <string name="enter_disrict">Enter District</string>
+    <string name="enter_state">Enter State</string>
+    <string name="enter_city">Enter City</string>
+    <string name="you_already_have_an_account_please_login">You already have an account please login</string>
+    <string name="please_check_your_internet_connection">Something went wrong, please check your internet and try again</string>
 </resources>

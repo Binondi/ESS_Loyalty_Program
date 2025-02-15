@@ -210,7 +210,7 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/viewPager"
                         android:layout_width="match_parent"
-                        android:layout_height="190dp"
+                        android:layout_height="@dimen/_150sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -222,6 +222,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:id="@+id/dotsBg"
                     android:padding="4dp">
 
                     <LinearLayout
@@ -237,7 +238,8 @@
                         android:layout_height="8dp"
                         android:layout_margin="1dp"
                         android:id="@+id/dot2"
-                        android:background="@drawable/circle_stroke" android:orientation="horizontal" />
+                        android:background="@drawable/circle_stroke"
+                        android:orientation="horizontal" />
 
                     <LinearLayout
                         android:layout_width="8dp"
@@ -252,7 +254,8 @@
                         android:layout_height="8dp"
                         android:layout_margin="1dp"
                         android:id="@+id/dot4"
-                        android:background="@drawable/circle_stroke" android:orientation="horizontal" />
+                        android:background="@drawable/circle_stroke"
+                        android:orientation="horizontal" />
 
 
 

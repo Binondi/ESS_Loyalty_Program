@@ -19,6 +19,7 @@ firebaseDatabase = "21.0.0"
 otpview = "3.1.0"
 retrofit = "2.11.0"
 sdpAndroid = "1.1.1"
+toasty = "1.5.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +39,7 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 otpview = { module = "com.github.mukeshsolanki.android-otpview-pinview:otpview", version.ref = "otpview" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
+toasty = { module = "com.github.GrenderG:Toasty", version.ref = "toasty" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

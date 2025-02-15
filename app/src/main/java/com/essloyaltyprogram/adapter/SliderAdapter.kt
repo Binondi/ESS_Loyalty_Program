@@ -24,7 +24,7 @@ class SliderAdapter(private val bannerList: List<BannerItem>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val realPosition = position % bannerList.size // Create an infinite loop
+        val realPosition = position % bannerList.size
         val item = bannerList[realPosition]
 
         holder.binding.progressBar.visibility = View.VISIBLE

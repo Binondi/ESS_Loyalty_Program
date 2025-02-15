@@ -1,5 +1,6 @@
 package com.essloyaltyprogram.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
@@ -7,12 +8,11 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.essloyaltyprogram.R
 import com.essloyaltyprogram.activity.AuthActivity
 import com.essloyaltyprogram.activity.MainActivity
@@ -23,23 +23,19 @@ import com.essloyaltyprogram.dataClasses.OtpResponse
 import com.essloyaltyprogram.dataClasses.Setting
 import com.essloyaltyprogram.dataClasses.Users
 import com.essloyaltyprogram.databinding.FragmentOtpBinding
-import com.essloyaltyprogram.databinding.FragmentTransactionBinding
 import com.essloyaltyprogram.unit.SharedPref
 import com.essloyaltyprogram.unit.SharedPref.setValue
 import com.essloyaltyprogram.unit.generateOtp
 import com.essloyaltyprogram.unit.generateUniqueString
 import com.essloyaltyprogram.unit.getCurrentDateTime
 import com.essloyaltyprogram.unit.hideLoading
+import com.essloyaltyprogram.unit.showErrorToast
 import com.essloyaltyprogram.unit.showLoading
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.random.Random
 
 class OtpFragment : Fragment() {
 
@@ -166,14 +162,15 @@ class OtpFragment : Fragment() {
         })
         binding.goToSignUp.setOnClickListener {
             if (enteredOtp.isEmpty()){
-                showErrorSnackbar(binding.root, "Please Enter Your OTP")
+                showErrorSnackbar(binding.root, getString(R.string.please_enter_your_otp))
                 return@setOnClickListener
             }
             if (enteredOtp != otp){
-                showErrorSnackbar(binding.root, "Invalid OTP")
+                showErrorSnackbar(binding.root, getString(R.string.invalid_otp))
                 return@setOnClickListener
             }
             if (enteredOtp == otp){
+                requireContext().showLoading()
                 if (from == "1"){
                     loginUser()
                 }else signUp()
@@ -204,20 +201,20 @@ class OtpFragment : Fragment() {
                     }else {
                         hideLoading()
                         resetTimer()
-                        Toast.makeText(requireContext(), "Failed to send OTP, please try again", Toast.LENGTH_SHORT).show()
+                        showErrorToast(requireContext(),getString(R.string.failed_to_send_otp_please_try_again))
                     }
 
                 } else {
                     hideLoading()
                     resetTimer()
-                    Toast.makeText(requireContext(), "Failed to send OTP, please try again", Toast.LENGTH_SHORT).show()
+                    showErrorToast(requireContext(),getString(R.string.failed_to_send_otp_please_try_again))
                 }
             }
 
             override fun onFailure(p0: retrofit2.Call<OtpResponse?>, p1: Throwable) {
                 hideLoading()
                 resetTimer()
-                Toast.makeText(requireContext(), "Failed to send OTP ${p1.message}", Toast.LENGTH_SHORT).show()
+                showErrorToast(requireContext(),getString(R.string.failed_to_send_otp_and_message) + p1.message)
             }
         })
     }
@@ -244,11 +241,7 @@ class OtpFragment : Fragment() {
                 loginUser()
             }
             else{
-                Toast.makeText(
-                    requireContext(),
-                    "Something went wrong, please try again later",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showErrorToast(requireContext(), getString(R.string.something_went_wrong_please_try_again_later))
             }
         }
     }
@@ -257,6 +250,7 @@ class OtpFragment : Fragment() {
 
     private fun loginUser(){
         setValue(requireContext(), "phone_no", phone)
+        hideLoading()
         startActivity(Intent(requireContext(), MainActivity::class.java))
         (activity as? AuthActivity)?.finishActivity()
     }
@@ -274,6 +268,7 @@ class OtpFragment : Fragment() {
 
         countDownTimer?.cancel() // Cancel any existing timer
         countDownTimer = object : CountDownTimer(120000, 1000) {
+            @SuppressLint("DefaultLocale")
             override fun onTick(millisUntilFinished: Long) {
                 val minutes = (millisUntilFinished / 1000) / 60
                 val seconds = (millisUntilFinished / 1000) % 60
@@ -281,7 +276,7 @@ class OtpFragment : Fragment() {
             }
 
             override fun onFinish() {
-                binding.resend.text = "Resend"
+                binding.resend.text = getString(R.string.resend)
                 binding.resend.isEnabled = true
                 binding.resend.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
             }
@@ -290,7 +285,7 @@ class OtpFragment : Fragment() {
 
     private fun resetTimer(){
         countDownTimer?.cancel()
-        binding.resend.text = "Resend"
+        binding.resend.text = getString(R.string.resend)
         binding.resend.isEnabled = true
         binding.resend.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
     }
