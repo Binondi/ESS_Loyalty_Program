@@ -63,4 +63,7 @@
     <string name="enter_city">Enter City</string>
     <string name="you_already_have_an_account_please_login">You already have an account please login</string>
     <string name="please_check_your_internet_connection">Something went wrong, please check your internet and try again</string>
+    <string name="basic_profile">Basic Profile</string>
+    <string name="address">Address</string>
+    <string name="kyc_details">KYC Details</string>
 </resources>

@@ -25,19 +25,20 @@
         android:background="@color/white"
         android:orientation="vertical">
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
             android:src="@drawable/ic_launcher_background"
             android:layout_gravity="center_horizontal"
             android:id="@+id/logo"
             android:scaleType="fitCenter"/>
+
         <ImageView
+            android:id="@+id/loginImage"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:maxHeight="300dp"
-            android:src="@drawable/mobile_signup"
+            android:layout_height="@dimen/_280sdp"
+            android:padding="@dimen/_30sdp"
             android:layout_gravity="center_horizontal"
-            android:id="@+id/loginImage"/>
+            android:src="@drawable/mobile_signup" />
 
     </LinearLayout>
         <LinearLayout

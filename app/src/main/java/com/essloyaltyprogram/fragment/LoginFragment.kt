@@ -153,61 +153,58 @@ class LoginFragment : Fragment() {
                 call: retrofit2.Call<OtpResponse?>,
                 response1: retrofit2.Response<OtpResponse?>
             ) {
+                if (!isAdded) return // Prevent crashes if fragment is detached
 
                 val response = response1.body()
-                if (response != null ) {
-                    if (response.`return`){
-                        loginUser(phone,otp)
-                    }else {
-                        hideLoading()
-                        showErrorToast(requireContext(),getString(R.string.failed_to_send_otp))
-                    }
-
+                if (response?.`return` == true) {
+                    loginUser(phone, otp)
                 } else {
-                    hideLoading()
-                    showErrorToast(requireContext(),getString(R.string.failed_to_send_otp))
+                    context?.let {
+                        hideLoading()
+                        showErrorToast(it, getString(R.string.failed_to_send_otp))
+                    }
                 }
             }
 
-            override fun onFailure(p0: retrofit2.Call<OtpResponse?>, p1: Throwable) {
-                hideLoading()
-                showErrorToast(requireContext(),getString(R.string.failed_to_send_otp_and_message)+ p1.message)
+            override fun onFailure(call: retrofit2.Call<OtpResponse?>, t: Throwable) {
+                if (!isAdded) return // Prevent crashes
+
+                context?.let {
+                    hideLoading()
+                    showErrorToast(it, getString(R.string.failed_to_send_otp_and_message) + t.message)
+                }
             }
         })
     }
+
 
 
     private fun checkUserExistance(phone: String) {
         users.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (data in snapshot.children){
-                    val user = data.getValue(Users::class.java)
-                    if (user != null){
-                        if (user.uid == phone){
-                            isUserExists = true
-                            break
-                        }else{
-                            isUserExists = false
-                        }
-                    }
-                }
-                if (isUserExists){
-                    val otp = generateOtp()
-                    sendOtp(phone, otp.toString())
-                }else {
-                    viewModel.setData(phone)
-                    showInfoToast(requireContext(),getString(R.string.you_donot_have_account_create_one))
-                    (activity as? AuthActivity)?.switchToSignup()
-                    hideLoading()
+                isUserExists = snapshot.children.any {
+                    it.getValue(Users::class.java)?.uid == phone
                 }
 
+                if (isUserExists) {
+                    val otp = generateOtp()
+                    sendOtp(phone, otp.toString())
+                } else {
+                    context?.let {
+                        viewModel.setData(phone)
+                        showInfoToast(it, getString(R.string.you_donot_have_account_create_one))
+                        (activity as? AuthActivity)?.switchToSignup()
+                        hideLoading()
+                    }
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                hideLoading()
             }
         })
     }
+
 
     private fun loginUser(phone: String, otp: String) {
         SharedPref.setValue(requireContext(), "from", "1")

@@ -32,8 +32,8 @@
         <!-- Logo -->
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_launcher_background"
             android:scaleType="fitCenter"/>
@@ -46,8 +46,8 @@
         <ImageView
             android:id="@+id/loginImage"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:padding="60dp"
+            android:layout_height="@dimen/_300sdp"
+            android:padding="@dimen/_30sdp"
             android:scaleType="fitCenter"
             android:src="@drawable/img_otp_screen"/>
         <View

@@ -1,6 +1,5 @@
 package com.essloyaltyprogram.activity
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,21 +7,14 @@ import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.helper.widget.Grid
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import com.essloyaltyprogram.R
-import com.essloyaltyprogram.adapter.HomeAdapter
-import com.essloyaltyprogram.dataClasses.HomeItems
 import com.essloyaltyprogram.databinding.ActivityMainBinding
 import com.essloyaltyprogram.fragment.HomeFragment
 import com.essloyaltyprogram.fragment.TransactionFragment
 import com.essloyaltyprogram.unit.SharedPref
-import com.essloyaltyprogram.unit.showLoading
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +24,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private var bottomNavPosition = 0
     private var exitPosition = 0
+    private var notificationOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-
+        notificationOn = SharedPref.getBoolean(this,"notification")
         toggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -50,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         setUpDrawarLayouts()
-        // Handle Navigation Item Clicks
         loadFragment(HomeFragment())
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
@@ -88,6 +80,14 @@ class MainActivity : AppCompatActivity() {
         }
         binding.drawer.userName.text = SharedPref.getValue(this,"name","Hello Dear")
         binding.drawer.phoneNo.text = SharedPref.getValue(this,"phone_no","")
+        binding.drawer.edtProfile.setOnClickListener {
+            startActivity(Intent(this,KycActivity::class.java))
+        }
+        binding.drawer.notificationSwitch.isChecked = notificationOn
+        binding.drawer.notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+                SharedPref.setBoolean(this,"notification", isChecked)
+            notificationOn = isChecked
+        }
     }
 
     private fun loadFragment(fragment: Fragment) {
